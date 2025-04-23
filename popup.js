@@ -29,8 +29,11 @@ function e(e, t, n, o, r, a, i) {
         if (!e) return g();
         l ||
           ((l = !0),
+          // @ts-ignore
           chrome.webRequest.onBeforeRequest.removeListener(p),
+          // @ts-ignore
           chrome.webRequest.onCompleted.removeListener(h),
+          // @ts-ignore
           chrome.webRequest.onErrorOccurred.removeListener(h),
           t());
       });
@@ -43,11 +46,15 @@ function e(e, t, n, o, r, a, i) {
   }
   function g() {
     setTimeout(function () {
+      // @ts-ignore
       new Date() - c < r || Object.keys(s).length || u();
     }, r);
   }
+  // @ts-ignore
   chrome.webRequest.onBeforeRequest.addListener(p, f),
+    // @ts-ignore
     chrome.webRequest.onCompleted.addListener(h, f),
+    // @ts-ignore
     chrome.webRequest.onErrorOccurred.addListener(h, f),
     (
       e ||
@@ -63,9 +70,11 @@ function e(e, t, n, o, r, a, i) {
 }
 function t(e, t) {
   return (
+    // @ts-ignore
     t && (e += 1462), (Date.parse(e) - new Date(Date.UTC(1899, 11, 30))) / 864e5
   );
 }
+// @ts-ignore
 function n(e, n) {
   for (
     var o = {}, r = { s: { c: 1e7, r: 1e7 }, e: { c: 0, r: 0 } }, a = 0;
@@ -79,17 +88,20 @@ function n(e, n) {
         r.e.c < i && (r.e.c = i);
       var s = { v: e[a][i] };
       if (null !== s.v) {
+        // @ts-ignore
         var c = XLSX.utils.encode_cell({ c: i, r: a });
         "number" == typeof s.v
           ? (s.t = "n")
           : "boolean" == typeof s.v
           ? (s.t = "b")
           : s.v instanceof Date
-          ? ((s.t = "n"), (s.z = XLSX.SSF._table[14]), (s.v = t(s.v)))
+          ? // @ts-ignore
+            ((s.t = "n"), (s.z = XLSX.SSF._table[14]), (s.v = t(s.v)))
           : (s.t = "s"),
           (o[c] = s);
       }
     }
+  // @ts-ignore
   return r.s.c < 1e7 && (o["!ref"] = XLSX.utils.encode_range(r)), o;
 }
 function o(e, t) {
@@ -100,6 +112,7 @@ function o(e, t) {
     })(),
     r = n(e.data);
   return (
+    // @ts-ignore
     o.SheetNames.push(t), (o.Sheets[t] = r), XLSX.write(o, { type: "binary" })
   );
 }
@@ -117,11 +130,14 @@ var i = { id: parseInt(u("tabid")), url: u("url") },
   l = null;
 async function d() {
   null !== i.url.toLowerCase().match(/\/\/[a-z]+\.linkedin\.com/)
-    ? ($("#waitHeader").hide(), p("", "noResponseErr", !1, !0))
+    ? // @ts-ignore
+      ($("#waitHeader").hide(), p("", "noResponseErr", !1, !0))
     : (I(),
       setTimeout(function () {
+        // @ts-ignore
         console.log("no response"), $("#waitHeader").is(":visible") && y(!0);
       }, 5e4),
+      // @ts-ignore
       $(window).resize(function () {
         v();
       }),
@@ -141,7 +157,9 @@ function u(e) {
   }
 }
 function p(e, t, n, o) {
+  // @ts-ignore
   if ("" === e) return $("#" + t).hide();
+  // @ts-ignore
   $("#" + t)
     .show()
     .text(e),
@@ -156,6 +174,7 @@ function h(e) {
     a = {},
     i = {};
   function c(e) {
+    // @ts-ignore
     return e in n ? n[e] : ((n[e] = $(f(e)).length), n[e]);
   }
   e.forEach(function (e) {
@@ -190,6 +209,7 @@ function h(e) {
                 if (!f) {
                   var n = !0;
                   e.forEach(function (e, t) {
+                    // @ts-ignore
                     n &= !(u[t] && e);
                   }),
                     n && (f = t + 1);
@@ -220,10 +240,14 @@ function h(e) {
             r.push(t);
           }),
           Object.keys(o).length && o[Object.keys(o)[0]] == t
-            ? (0, !1)
-            : (r = JSON.stringify(r)) in l
-            ? (0, !1)
-            : ((l[r] = 1), !(i[n] < 0.2 * t) || (0, !1)))
+            ? // @ts-ignore
+              (0, !1)
+            : // @ts-ignore
+            (r = JSON.stringify(r)) in l
+            ? // @ts-ignore
+              (0, !1)
+            : // @ts-ignore
+              ((l[r] = 1), !(i[n] < 0.2 * t) || (0, !1)))
         );
       })),
       data: e.map(function (e) {
@@ -272,7 +296,9 @@ function b() {
         t = Object.keys(s.config.headers).length;
       t &&
         j(!0).then((n) => {
+          // @ts-ignore
           let [o, r] = n;
+          // @ts-ignore
           const i = (e) => r.find((t) => t.field_id === e);
           let c = {
             tableId: s.tableId,
@@ -280,12 +306,15 @@ function b() {
             startingUrl: s.startingUrl,
           };
           if (t)
+            // @ts-ignore
             for (name in s.config.headers) {
+              // @ts-ignore
               let t = i(s.config.headers[name])
                   .selector.split(",")
                   .map((e) => e.slice(-100)),
                 n = Object.assign(e(t), c, {
                   originalName: name,
+                  // @ts-ignore
                   newName: s.config.headers[name],
                 });
               a.fireEvent("RenameColumn", n);
@@ -298,42 +327,57 @@ function v() {
   e.data = e.data.slice(0, c);
   s.previewLength = e.data.length;
 
+  // @ts-ignore
   var t = $(".wtHolder").scrollTop();
+  // @ts-ignore
   var n = $(".wtHolder").scrollLeft();
   var o = false;
 
+  // @ts-ignore
   $("#hot").empty();
+  // @ts-ignore
   new Handsontable($("#hot").get(0), {
     data: e.data,
     colHeaders: g(e.fields),
     wordWrap: false,
     manualColumnResize: true,
+    // @ts-ignore
     width: $(window).width() - 20,
+    // @ts-ignore
     height: $(window).height() - $("#hot").get(0).getBoundingClientRect().y,
     afterRender: function () {
       if (!o) {
         o = true;
+        // @ts-ignore
         $(".wtHolder").scrollTop(t);
+        // @ts-ignore
         $(".wtHolder").scrollLeft(n);
       }
     },
+    // @ts-ignore
     modifyColWidth: function (e, t) {
       if (e > 300) return 300;
     },
     afterGetColHeader: function (t, n) {
       if (t !== -1) {
+        // @ts-ignore
         if ($(n).children().length > 1) {
+          // @ts-ignore
           $(".hot-header", n).remove();
         } else {
+          // @ts-ignore
           $(n).click(function () {
             var e = this;
             setTimeout(function () {
+              // @ts-ignore
               $(".header-input", e).trigger("focus");
             }, 20);
           });
         }
 
+        // @ts-ignore
         var o = $("<div>", { class: "hot-header" });
+        // @ts-ignore
         var r = $("<div>", { class: "header-input", contenteditable: "true" });
 
         if (s.config.headers[e.fields[t]]) {
@@ -342,15 +386,18 @@ function v() {
           r.text(n.firstChild.textContent);
         }
 
+        // @ts-ignore
         $(n).append(o);
         o.append(r);
         o.append(
+          // @ts-ignore
           $("<span>", {
             class: "glyphicon glyphicon-remove-circle remove-column",
             style: "padding-top: 2.5px",
           }).click(function () {
             s.config.deletedFields[e.fields[t]] = true;
             S();
+            // @ts-ignore
             $("#resetColumns").show();
             v();
           })
@@ -364,6 +411,7 @@ function v() {
         n.firstChild.style.display = "none";
       }
     },
+    // @ts-ignore
     beforeOnCellMouseDown: function (e, t, n) {
       if (t.row < 0) e.stopImmediatePropagation();
     },
@@ -372,7 +420,9 @@ function v() {
 function S() {
   localStorage.setItem(s.configName, JSON.stringify(s.config));
 }
+// @ts-ignore
 function y(e) {
+  // @ts-ignore
   $("#waitHeader").hide(),
     p(
       "Doesn't support data extraction from this site yet.",
@@ -389,10 +439,13 @@ function x(e, t) {
     return i.reloaded
       ? y()
       : ((i.reloaded = !0),
+        // @ts-ignore
         chrome.tabs.reload(i.id, {}, function () {
+          // @ts-ignore
           chrome.tabs.onUpdated.addListener(function e(t, n) {
             "complete" === n.status &&
               t === i.id &&
+              // @ts-ignore
               (chrome.tabs.onUpdated.removeListener(e), R());
           });
         }));
@@ -420,13 +473,19 @@ function x(e, t) {
               startingUrl: s.startingUrl,
             })
     ),
+    // @ts-ignore
     Object.keys(s.config.deletedFields).length && $("#resetColumns").show();
   var n = N(i.url);
+  // @ts-ignore
   $("#wrongTable").show(),
     s.config.infinateScrollChecked &&
+      // @ts-ignore
       ($("#nextButton").hide(),
+      // @ts-ignore
       $("#startScraping").show(),
+      // @ts-ignore
       $("#infinateScroll").prop("checked", !0)),
+    // @ts-ignore
     chrome.tabs.sendMessage(i.id, { action: "getTableData" }, function (e) {
       e && e.error
         ? p("Something went wrong!", "noResponseErr", !0)
@@ -439,19 +498,25 @@ function x(e, t) {
               ),
               (s.failedToProcess = !0),
               (s.processingError = e.processingError))
-            : ($("#error").hide(), (s.failedToProcess = !1)),
+            : // @ts-ignore
+              ($("#error").hide(), (s.failedToProcess = !1)),
+          // @ts-ignore
           s.pages || s.config.infinateScrollChecked || $("#nextButton").show(),
           s.pages ||
             ((s.nextSelector = k()),
             s.nextSelector &&
+              // @ts-ignore
               chrome.tabs.sendMessage(
                 i.id,
                 { action: "markNextButton", selector: s.nextSelector },
                 function (e) {
+                  // @ts-ignore
                   e.error || $("#startScraping").show();
                 }
               )),
+          // @ts-ignore
           $("#wait").hide(),
+          // @ts-ignore
           $("#content").show(),
           (s.data = e.data),
           (s.pages = 1),
@@ -460,13 +525,23 @@ function x(e, t) {
           (s.goodClasses = e.goodClasses),
           (s.workingTime = 0),
           q(),
+          // @ts-ignore
           $(".download-button").show(),
           v(),
+          // @ts-ignore
           $("#csv")
             .off("click")
             .click(function () {
               console.log("Downloading CSV..."), r(b), P({ download: !0 });
+
               let e = w(s.data);
+
+              // Map class names to proper names
+              e.fields = mapClassNamesToProperNames(e.fields);
+
+              // Filter out empty columns
+              e.data = filterEmptyColumns(e.data);
+
               e.data.forEach((t, n) => {
                 t.forEach((t, o) => {
                   Array.isArray(t) &&
@@ -475,14 +550,16 @@ function x(e, t) {
                       escapeChar: '"',
                     }));
                 });
-              }),
-                saveAs(
-                  new Blob([Papa.unparse(e, { quotes: !0, escapeChar: '"' })], {
-                    type: "application/octet-stream",
-                  }),
-                  n + ".csv"
-                );
+              });
+
+              saveAs(
+                new Blob([Papa.unparse(e, { quotes: !0, escapeChar: '"' })], {
+                  type: "application/octet-stream",
+                }),
+                N(i.url) + ".csv"
+              );
             }),
+          // @ts-ignore
           $("#xlsx")
             .off("click")
             .click(function () {
@@ -495,11 +572,13 @@ function x(e, t) {
                   n + ".xlsx"
                 );
             }),
+          // @ts-ignore
           $("#copy")
             .off("click")
             .click(function () {
               r(b),
                 P({ download: !0 }),
+                // @ts-ignore
                 E(Papa.unparse(w(s.data), { delimiter: "\t" }));
             }));
     });
@@ -513,13 +592,15 @@ function E(e) {
     t.preventDefault(),
       t.clipboardData
         ? t.clipboardData.setData("text/plain", e)
-        : window.clipboardData && window.clipboardData.setData("Text", e);
+        : // @ts-ignore
+          window.clipboardData && window.clipboardData.setData("Text", e);
   };
   window.addEventListener("copy", t),
     document.execCommand("copy"),
     window.removeEventListener("copy", t);
 }
 function R() {
+  // @ts-ignore
   chrome.tabs.sendMessage(
     i.id,
     { action: "findTables", robots: l },
@@ -529,6 +610,7 @@ function R() {
   );
 }
 function C() {
+  // @ts-ignore
   return $("#infinateScroll").is(":checked");
 }
 function D(e) {
@@ -540,28 +622,36 @@ function D(e) {
 function T() {
   (s.gettingNext = !1),
     (s.scraping = !0),
+    // @ts-ignore
     $("#startScraping").hide(),
+    // @ts-ignore
     $("#stopScraping").show(),
     p("", "error"),
     p('Please wait for more pages or press "Stop crawling".', "instructions"),
+    // @ts-ignore
     C() && $("#infinateScrollElement").hide();
   var t = new Date();
+  // @ts-ignore
   !(function n() {
     const o = function (e) {
       let t = { action: "scrollDown", selector: s.tableSelector };
+      // @ts-ignore
       chrome.tabs.sendMessage(i.id, t, function (t) {
         if (t && t.error)
           return p("", "instructions"), p(t.error, t.errorId || "error", !0);
+        // @ts-ignore
         $("#wrongTable").hide(), e();
       });
     };
     var r = function (e) {
+      // @ts-ignore
       chrome.tabs.sendMessage(
         i.id,
         { action: "clickNext", selector: s.nextSelector },
         function (t) {
           if (t && t.error)
             return p("", "instructions"), p(t.error, t.errorId, !0);
+          // @ts-ignore
           $("#wrongTable").hide(), e();
         }
       );
@@ -570,6 +660,7 @@ function T() {
       e(
         r,
         function () {
+          // @ts-ignore
           chrome.tabs.sendMessage(
             i.id,
             { action: "getTableData", selector: s.tableSelector },
@@ -587,9 +678,11 @@ function T() {
                     ),
                     (s.failedToProcess = !0),
                     (s.processingError = e.processingError))
-                  : ($("#error").hide(), (s.failedToProcess = !1)),
+                  : // @ts-ignore
+                    ($("#error").hide(), (s.failedToProcess = !1)),
                   (s.lastRows = e.data.length),
                   s.pages++,
+                  // @ts-ignore
                   (s.workingTime += new Date() - t),
                   (t = new Date()),
                   D(e.data),
@@ -607,6 +700,7 @@ function T() {
         100,
         s.config.crawlDelay,
         function (e) {
+          // @ts-ignore
           chrome.tabs.sendMessage(i.id, {}, function (t) {
             e(void 0 !== t);
           });
@@ -615,43 +709,62 @@ function T() {
   })();
 }
 function I() {
+  // @ts-ignore
   $("#stopScraping").click(L),
+    // @ts-ignore
     $("#crawlDelay").bind(
       "propertychange change click keyup input paste",
       function () {
+        // @ts-ignore
         var e = $(this).val();
+        // @ts-ignore
         if (isNaN(e) || e < 0 || parseInt(1e3 * e) >= s.config.maxWait)
           return p("Bad min waiting value", "inputError");
+        // @ts-ignore
         p("", "inputError"), (s.config.crawlDelay = parseInt(1e3 * e)), S();
       }
     ),
+    // @ts-ignore
     $("#maxWait").bind(
       "propertychange change click keyup input paste",
       function () {
+        // @ts-ignore
         var e = $(this).val();
+        // @ts-ignore
         if (isNaN(e) || parseInt(1e3 * e) <= s.config.crawlDelay)
           return p("Bad max waiting value", "inputError");
+        // @ts-ignore
         p("", "inputError"), (s.config.maxWait = parseInt(1e3 * e)), S();
       }
     ),
+    // @ts-ignore
     $("#resetColumns").click(function () {
+      // @ts-ignore
       (s.config.deletedFields = {}), S(), $("#resetColumns").hide(), v();
     }),
+    // @ts-ignore
     $("#infinateScroll").click(function (e) {
       s.config.infinateScrollChecked
         ? ((s.config.infinateScrollChecked = !1),
+          // @ts-ignore
           $("#nextButton").show(),
+          // @ts-ignore
           k() ? $("#startScraping").show() : $("#startScraping").hide())
         : ((s.config.infinateScrollChecked = !0),
+          // @ts-ignore
           $("#nextButton").hide(),
+          // @ts-ignore
           $("#startScraping").show()),
         S();
     });
 }
+// @ts-ignore
 function L(e = null) {
   (s.scraping = !1),
     console.log("Scraping stopped."),
+    // @ts-ignore
     $("#startScraping").show(),
+    // @ts-ignore
     $("#stopScraping").hide(),
     p(
       "Crawling stopped. Please download data or continue crawling.",
@@ -659,20 +772,26 @@ function L(e = null) {
     );
 }
 function O() {
+  // @ts-ignore
   $("#pleaseRate").show(),
+    // @ts-ignore
     $("#rateLater")
       .show()
       .click(function () {
         P({ rate: "later" }),
+          // @ts-ignore
           $("#pleaseRate").hide(),
           r(() => a.fireEvent("Click", { button: "Rate later" }));
       }),
+    // @ts-ignore
     $("#rate")
       .show()
       .click(function () {
         P({ rate: "now" }),
+          // @ts-ignore
           $("#pleaseRate").hide(),
           r(() => a.fireEvent("Click", { button: "Rate now" })),
+          // @ts-ignore
           chrome.tabs.create({
             url: "",
           });
@@ -706,13 +825,19 @@ function P(e) {
     localStorage.setItem("stats", JSON.stringify(t));
 }
 function q() {
+  // @ts-ignore
   $("#stats")
     .empty()
+    // @ts-ignore
     .append($("<div>", { text: "Pages scraped: " + s.pages }))
+    // @ts-ignore
     .append($("<div>", { text: "Rows collected: " + s.data.length }))
+    // @ts-ignore
     .append($("<div>", { text: "Rows from last page: " + s.lastRows }))
     .append(
+      // @ts-ignore
       $("<div>", {
+        // @ts-ignore
         text: "Working time: " + parseInt(s.workingTime / 1e3) + "s",
       })
     ),
@@ -763,6 +888,7 @@ async function j(e = !1) {
 }
 function U(e, t) {
   return new Promise((n, o) => {
+    // @ts-ignore
     chrome.tabs.sendMessage(
       i.id,
       { action: "chooseSelector", rowSelector: e, path: t },
@@ -773,14 +899,19 @@ function U(e, t) {
   });
 }
 d(),
+  // @ts-ignore
   $("#wrongTable").click(function () {
+    // @ts-ignore
     $("#hot").empty(),
+      // @ts-ignore
       chrome.tabs.sendMessage(i.id, { action: "nextTable" }, x);
   }),
+  // @ts-ignore
   $("#nextButton").click(function () {
     p('Mark "Next" button or link', "instructions"),
       (s.gettingNext = !0),
       (function e() {
+        // @ts-ignore
         chrome.tabs.sendMessage(
           i.id,
           { action: "getNextButton" },
@@ -788,6 +919,7 @@ d(),
             s.scraping ||
               (s.gettingNext && e(),
               t.selector &&
+                // @ts-ignore
                 ($("#startScraping").show(),
                 p(
                   '"Next" button located. Press "Start crawling" to get more pages or mark another button/link if marked incorrectly.',
@@ -802,4 +934,133 @@ d(),
         );
       })();
   }),
+  // @ts-ignore
   $("#startScraping").click(T);
+
+function mapClassNamesToProperNames(headers) {
+  const classNameToProperName = {
+    class1: "Proper Name 1",
+    class2: "Proper Name 2",
+    // Add more mappings as needed
+  };
+  return headers.map((header) => classNameToProperName[header] || header);
+}
+
+function filterEmptyColumns(data) {
+  const nonEmptyColumns = data[0].map((_, colIndex) =>
+    data.some((row) => row[colIndex] !== "")
+  );
+  return data.map((row) =>
+    row.filter((_, colIndex) => nonEmptyColumns[colIndex])
+  );
+}
+
+// Modify the CSV export logic
+$("#csv")
+  .off("click")
+  .click(function () {
+    console.log("Downloading CSV...");
+    r(b);
+    P({ download: !0 });
+
+    let e = w(s.data);
+
+    // Map class names to proper names
+    e.fields = mapClassNamesToProperNames(e.fields);
+
+    // Filter out empty columns
+    e.data = filterEmptyColumns(e.data);
+
+    e.data.forEach((t, n) => {
+      t.forEach((t, o) => {
+        Array.isArray(t) &&
+          (e.data[n][o] = Papa.unparse([t], {
+            quotes: !0,
+            escapeChar: '"',
+          }));
+      });
+    });
+
+    saveAs(
+      new Blob([Papa.unparse(e, { quotes: !0, escapeChar: '"' })], {
+        type: "application/octet-stream",
+      }),
+      N(i.url) + ".csv"
+    );
+  });
+
+function initializeLocalStorage() {
+  const defaultData = {
+    userPreferences: {
+      theme: "light",
+      language: "en",
+    },
+    usageStats: {
+      openedCount: 0,
+      lastOpened: null,
+    },
+  };
+
+  const googleConfig = {
+    headers: {
+      rgnuSb: "Name",
+      "hfpxzc href": "Map Location",
+      qBF1Pd: "Name",
+      MW4etd: "Ratings",
+      W4Efsd: "Business Title",
+      "W4Efsd 3": "Location",
+      UsdlK: "Phone",
+      "lcr4fd href": "Websites",
+      rGaJuf: "Ratings",
+      "hGz87c 2": "Locations",
+      "hGz87c 3": "Phone",
+      "zuotBc href": "Websites",
+      "zuotBc href 2": "Map Locations",
+    },
+    deletedFields: {
+      UY7F9: true,
+      "W4Efsd 2": true,
+      "W4Efsd 4": true,
+      "W4Efsd 5": true,
+      Cw1rxd: true,
+      R8c4Qb: true,
+      "Cw1rxd 2": true,
+      "R8c4Qb 2": true,
+      ah5Ghc: true,
+      M4A5Cf: true,
+      "ah5Ghc 2": true,
+      "W4Efsd 6": true,
+      doJOZc: true,
+      "W4Efsd 7": true,
+      "Jn12ke src": true,
+      "A5yTVb 3": true,
+      "VfPpkd-vQzf8d 3": true,
+      "VfPpkd-vQzf8d 2": true,
+      "Od1FEc href": true,
+      "A5yTVb 2": true,
+      A5yTVb: true,
+      FjZRNe: true,
+      leIgTe: true,
+      "Fy57pd src": true,
+    },
+  };
+
+  if (!localStorage.getItem("extensionData")) {
+    localStorage.setItem("extensionData", JSON.stringify(defaultData));
+    console.log("Default data added to local storage.");
+  } else {
+    const data = JSON.parse(localStorage.getItem("extensionData"));
+    data.usageStats.openedCount += 1;
+    data.usageStats.lastOpened = new Date().toISOString();
+    localStorage.setItem("extensionData", JSON.stringify(data));
+    console.log("Updated usage stats in local storage.");
+  }
+
+  if (!localStorage.getItem("www.google.com-config")) {
+    localStorage.setItem("www.google.com-config", JSON.stringify(googleConfig));
+    console.log("Default Google config added to local storage.");
+  }
+}
+
+// Call the function when the extension is opened
+document.addEventListener("DOMContentLoaded", initializeLocalStorage);
