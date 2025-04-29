@@ -166,6 +166,24 @@ function p(e, t, n, o) {
     n && L(e),
     o && a.fireEvent("Error", { url: s.startingUrl || i.url, msg: e });
 }
+function detectField(value, index) {
+  const val = value.trim();
+
+  if (val.startsWith("https://www.google.com/maps")) return "google_maps_link";
+  if (val.startsWith("https://lh3.googleusercontent.com"))
+    return "thumbnail_link";
+  if (/^https?:\/\/(?!.*google\.com)/i.test(val)) return "website";
+  if (/^\+?\d[\d\s\-().]{7,}$/.test(val)) return "phone";
+  if (/^\(\d+\)$/.test(val)) return "reviews";
+  if (/^\d+(\.\d+)?$/.test(val)) return "rating";
+
+  // Detect by order:
+  if (index === 1) return "business_name"; // 2nd item is usually business name
+  if (index === 4) return "category"; // 5th item is usually the category
+
+  // fallback
+  return "unknown";
+}
 function h(e) {
   var t = e.length,
     n = { "": 1 / 0 },
@@ -258,6 +276,8 @@ function h(e) {
         });
       }),
     };
+  const lol = d.data;
+
   return (s.names = r), (s.namePaths = a), d;
 }
 function g(e) {
@@ -536,12 +556,6 @@ function x(e, t) {
 
               let e = w(s.data);
 
-              // Map class names to proper names
-              e.fields = mapClassNamesToProperNames(e.fields);
-
-              // Filter out empty columns
-              e.data = filterEmptyColumns(e.data);
-
               e.data.forEach((t, n) => {
                 t.forEach((t, o) => {
                   Array.isArray(t) &&
@@ -563,14 +577,51 @@ function x(e, t) {
           $("#xlsx")
             .off("click")
             .click(function () {
-              r(b),
-                P({ download: !0 }),
-                saveAs(
-                  new Blob([m(o(w(s.data), i.url.substring(0, 100)))], {
-                    type: "application/octet-stream",
-                  }),
-                  n + ".xlsx"
-                );
+              let e = w(s.data);
+              const sanitizedData = e.data
+                .filter((row) => row.some((cell) => cell.trim() !== ""))
+                .map((row) => {
+                  const obj = {};
+                  row.forEach((value, index) => {
+                    if (!value.trim()) return;
+                    const key = detectField(value, index);
+                    if (key !== "unknown" && !obj[key]) {
+                      obj[key] = value.trim();
+                    }
+                  });
+                  return obj;
+                });
+
+              // Add a confirmation alert before sending data to the API
+              if (
+                confirm(
+                  "Are you sure you want to save in database?"
+                )
+              ) {
+                fetch("http://localhost:5000/api/business", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ data: sanitizedData }),
+                })
+                  .then((response) => response.json())
+                  .then((result) => {
+                    alert("Data successfully sent to the server!");
+                    console.log(
+                      "Data successfully sent to the server:",
+                      result
+                    );
+                  })
+                  .catch((error) => {
+                    alert(
+                      "An error occurred while sending data to the server."
+                    );
+                    console.error("Error sending data to the server:", error);
+                  });
+              } else {
+                alert("Action canceled by the user.");
+              }
             }),
           // @ts-ignore
           $("#copy")
@@ -937,58 +988,6 @@ d(),
   // @ts-ignore
   $("#startScraping").click(T);
 
-function mapClassNamesToProperNames(headers) {
-  const classNameToProperName = {
-    class1: "Proper Name 1",
-    class2: "Proper Name 2",
-    // Add more mappings as needed
-  };
-  return headers.map((header) => classNameToProperName[header] || header);
-}
-
-function filterEmptyColumns(data) {
-  const nonEmptyColumns = data[0].map((_, colIndex) =>
-    data.some((row) => row[colIndex] !== "")
-  );
-  return data.map((row) =>
-    row.filter((_, colIndex) => nonEmptyColumns[colIndex])
-  );
-}
-
-// Modify the CSV export logic
-$("#csv")
-  .off("click")
-  .click(function () {
-    console.log("Downloading CSV...");
-    r(b);
-    P({ download: !0 });
-
-    let e = w(s.data);
-
-    // Map class names to proper names
-    e.fields = mapClassNamesToProperNames(e.fields);
-
-    // Filter out empty columns
-    e.data = filterEmptyColumns(e.data);
-
-    e.data.forEach((t, n) => {
-      t.forEach((t, o) => {
-        Array.isArray(t) &&
-          (e.data[n][o] = Papa.unparse([t], {
-            quotes: !0,
-            escapeChar: '"',
-          }));
-      });
-    });
-
-    saveAs(
-      new Blob([Papa.unparse(e, { quotes: !0, escapeChar: '"' })], {
-        type: "application/octet-stream",
-      }),
-      N(i.url) + ".csv"
-    );
-  });
-
 function initializeLocalStorage() {
   const defaultData = {
     userPreferences: {
@@ -1004,11 +1003,11 @@ function initializeLocalStorage() {
   const googleConfig = {
     headers: {
       rgnuSb: "Name",
+      UY7F9: "Total Ratings",
       "hfpxzc href": "Map Location",
       qBF1Pd: "Name",
       MW4etd: "Ratings",
       W4Efsd: "Business Title",
-      "W4Efsd 3": "Location",
       UsdlK: "Phone",
       "lcr4fd href": "Websites",
       rGaJuf: "Ratings",
@@ -1017,32 +1016,7 @@ function initializeLocalStorage() {
       "zuotBc href": "Websites",
       "zuotBc href 2": "Map Locations",
     },
-    deletedFields: {
-      UY7F9: true,
-      "W4Efsd 2": true,
-      "W4Efsd 4": true,
-      "W4Efsd 5": true,
-      Cw1rxd: true,
-      R8c4Qb: true,
-      "Cw1rxd 2": true,
-      "R8c4Qb 2": true,
-      ah5Ghc: true,
-      M4A5Cf: true,
-      "ah5Ghc 2": true,
-      "W4Efsd 6": true,
-      doJOZc: true,
-      "W4Efsd 7": true,
-      "Jn12ke src": true,
-      "A5yTVb 3": true,
-      "VfPpkd-vQzf8d 3": true,
-      "VfPpkd-vQzf8d 2": true,
-      "Od1FEc href": true,
-      "A5yTVb 2": true,
-      A5yTVb: true,
-      FjZRNe: true,
-      leIgTe: true,
-      "Fy57pd src": true,
-    },
+    deletedFields: {},
   };
 
   if (!localStorage.getItem("extensionData")) {
@@ -1062,5 +1036,4 @@ function initializeLocalStorage() {
   }
 }
 
-// Call the function when the extension is opened
 document.addEventListener("DOMContentLoaded", initializeLocalStorage);
